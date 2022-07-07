@@ -1,0 +1,10 @@
+test_sample/
+Genome_and_Index/
+*.fasta
+*.fq
+*.gz
+vcf_exploration/
+test_recal_filters/
+qualimap/
+wgs_fastqc/
+*.docx
