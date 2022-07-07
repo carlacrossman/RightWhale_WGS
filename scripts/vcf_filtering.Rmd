@@ -1,0 +1,259 @@
+---
+title: "RW_vcf_exploration"
+author: "CCrossman"
+date: "04/07/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## VCF Exploration before and before and after filtering
+
+I am starting an Rmarkdown workbook to go through my notes and code for assessing my filtering parameters
+
+
+### Enironment set up
+
+First I will load libraries and set the working directory. I will also load the vcf files from before any filtering and after repeat masking.
+
+```{r message=TRUE}
+###---Load Libraries---###
+
+library(vcfR)
+library(ggplot2)
+
+###---Set Working Directory---###
+
+setwd("C:/Users/c_cro/Documents/PhD/RightWhale/WGS/vcf_exploration/")
+
+###---Load Data Files---###
+
+narw_df <- read.csv("C:/Users/c_cro/Documents/PhD/RightWhale/WGS/vcf_exploration/before_narw.csv")
+masked_df <- read.csv("C:/Users/c_cro/Documents/PhD/RightWhale/WGS/vcf_exploration/masking_narw.csv")
+filtered_df <- read.csv("C:/Users/c_cro/Documents/PhD/RightWhale/WGS/vcf_exploration/filtered_narw.csv")
+
+narw_repeats_df<- read.csv("C:/Users/c_cro/Documents/PhD/RightWhale/WGS/vcf_exploration/narw_masked_repeats_wau.csv")
+
+smasked_df <- read.csv("C:/Users/c_cro/Documents/PhD/RightWhale/WGS/vcf_exploration/masking_srw.csv")
+sfiltered_df <- read.csv("C:/Users/c_cro/Documents/PhD/RightWhale/WGS/vcf_exploration/filtered_srw.csv")
+
+```
+## Loading Data Files and Extracting relevant data.
+
+Run this block once only - Not to be run each time!
+
+```{r, echo=FALSE}
+# narw_vcf <- read.vcfR("merged_narw_all_scaffold.vcf.gz", verbose = TRUE) #raw vcf
+# 
+# narw_mq <- extract.info(narw_vcf, element="MQ", as.numeric=TRUE)
+# narw_dp <- extract.info(narw_vcf, element="DP", as.numeric=TRUE)
+# narw_qd <- extract.info(narw_vcf, element="QD", as.numeric=TRUE)
+# 
+# info_df <-data.frame(narw_mq, narw_dp, narw_qd)
+# write.csv(info_df, "C:/Users/c_cro/Documents/PhD/RightWhale/WGS/vcf_exploration/before_narw.csv")
+
+###---After Masking files---###
+
+# masked_narw_vcf <- read.vcfR("C:/Users/c_cro/Documents/PhD/RightWhale/WGS/vcf_exploration/narw_masked.vcf.gz", verbose = TRUE) #vcf after masking
+# 
+# masked_mq <- extract.info(masked_narw_vcf, element="MQ", as.numeric=TRUE)
+# masked_dp <- extract.info(masked_narw_vcf, element="DP", as.numeric=TRUE)
+# masked_qd <- extract.info(masked_narw_vcf, element="QD", as.numeric=TRUE)
+# 
+# masked_df <-data.frame(masked_mq, masked_dp, masked_qd)
+# write.csv(masked_df, "C:/Users/c_cro/Documents/PhD/RightWhale/WGS/vcf_exploration/masking_narw.csv")
+# 
+# ###---After Filtering files---###
+# 
+# filtered_narw_vcf <- read.vcfR("C:/Users/c_cro/Documents/PhD/RightWhale/WGS/vcf_exploration/narw_masked_filtered.vcf.gz", verbose = TRUE) #vcf after masking
+# 
+# filtered_mq <- extract.info(filtered_narw_vcf, element="MQ", as.numeric=TRUE)
+# filtered_dp <- extract.info(filtered_narw_vcf, element="DP", as.numeric=TRUE)
+# filtered_qd <- extract.info(filtered_narw_vcf, element="QD", as.numeric=TRUE)
+# 
+# filtered_df <-data.frame(filtered_mq, filtered_dp, filtered_qd)
+# write.csv(filtered_df, "C:/Users/c_cro/Documents/PhD/RightWhale/WGS/vcf_exploration/filtered_narw.csv")
+# 
+# #################################################
+
+###---Southern Right Whale---###
+
+## Before too large to create these dataframes easily
+
+## srw_vcf <- read.vcfR("C:/Users/c_cro/Documents/PhD/RightWhale/WGS/vcf_exploration/merged_srw_all_scaffold.vcf.gz", verbose = TRUE) #raw vcf
+# 
+## srw_mq <- extract.info(srw_vcf, element="MQ", as.numeric=TRUE)
+## srw_dp <- extract.info(srw_vcf, element="DP", as.numeric=TRUE)
+## srw_qd <- extract.info(srw_vcf, element="QD", as.numeric=TRUE)
+# 
+## info_srw <-data.frame(srw_mq, srw_dp, srw_qd)
+## write.csv(info_srw, "C:/Users/c_cro/Documents/PhD/RightWhale/WGS/vcf_exploration/before_srw.csv")
+
+###---After Masking files---###
+
+# masked_srw_vcf <- read.vcfR("C:/Users/c_cro/Documents/PhD/RightWhale/WGS/vcf_exploration/srw_masked.vcf.gz", verbose = TRUE) #vcf after masking
+# 
+# smasked_mq <- extract.info(masked_srw_vcf, element="MQ", as.numeric=TRUE)
+# smasked_dp <- extract.info(masked_srw_vcf, element="DP", as.numeric=TRUE)
+# smasked_qd <- extract.info(masked_srw_vcf, element="QD", as.numeric=TRUE)
+# 
+# smasked_df <-data.frame(smasked_mq, smasked_dp, smasked_qd)
+# write.csv(smasked_df, "C:/Users/c_cro/Documents/PhD/RightWhale/WGS/vcf_exploration/masking_srw.csv")
+
+###---After Filtering files---###
+
+# filtered_srw_vcf <- read.vcfR("C:/Users/c_cro/Documents/PhD/RightWhale/WGS/vcf_exploration/srw_masked_filtered.vcf.gz", verbose = TRUE) #vcf after masking
+# 
+# sfiltered_mq <- extract.info(filtered_srw_vcf, element="MQ", as.numeric=TRUE)
+# sfiltered_dp <- extract.info(filtered_srw_vcf, element="DP", as.numeric=TRUE)
+# sfiltered_qd <- extract.info(filtered_srw_vcf, element="QD", as.numeric=TRUE)
+# 
+# sfiltered_df <-data.frame(sfiltered_mq, sfiltered_dp, sfiltered_qd)
+# write.csv(sfiltered_df, "C:/Users/c_cro/Documents/PhD/RightWhale/WGS/vcf_exploration/filtered_srw.csv")
+
+
+##########################################################3
+
+###---NARW repeat sites---###
+# wau_narw_vcf <- read.vcfR("C:/Users/c_cro/Documents/PhD/RightWhale/WGS/vcf_exploration/test_wau_narw_masked.vcf.gz", verbose = TRUE) #vcf after masking
+#  
+# wau_masked_mq <- extract.info(wau_narw_vcf, element="MQ", as.numeric=TRUE)
+# wau_masked_dp <- extract.info(wau_narw_vcf, element="DP", as.numeric=TRUE)
+# wau_masked_qd <- extract.info(wau_narw_vcf, element="QD", as.numeric=TRUE)
+#  
+# wau_masked_df <-data.frame(wau_masked_mq, wau_masked_dp, wau_masked_qd)
+# write.csv(wau_masked_df, "C:/Users/c_cro/Documents/PhD/RightWhale/WGS/vcf_exploration/narw_masked_repeats_wau.csv")
+```
+
+## Plots
+
+These plots look at the raw vcf, the masked vcf and the filtered vcfs. There are also histograms used after masking to help determine max read depth thresholds.
+
+```{r echo=FALSE, fig.cap="Raw VCF DP vs QD"}
+ggplot(narw_df, aes(x=narw_dp, y=narw_qd) ) +
+  geom_hex() +
+  scale_fill_viridis_c(option = "magma") +
+  theme_bw()
+```
+
+```{r echo=FALSE, fig.cap="Raw VCF DP vs MQ"}
+ggplot(narw_df, aes(x=narw_dp, y=narw_mq) ) +
+  geom_hex() +
+  scale_fill_viridis_c(option = "magma") +
+  theme_bw()
+```
+
+```{r echo=FALSE, fig.cap="Masked VCF DP vs QD"}
+ggplot(masked_df, aes(x=masked_dp, y=masked_qd) ) +
+  geom_hex() +
+  scale_fill_viridis_c(option = "magma") +
+  theme_bw()
+```
+
+```{r echo=FALSE, fig.cap="Masked VCF DP vs MQ"}
+ggplot(masked_df, aes(x=masked_dp, y=masked_mq) ) +
+  geom_hex() +
+  scale_fill_viridis_c(option = "magma") +
+  theme_bw()
+```
+
+## Assessing Depth Distribution after Masking
+
+We will want to make an upper DP cut off. Based on the plots below, we will use 2x the median value - Max depth 790.
+
+```{r fig.caption="Histogram of raw depth"}
+mean_masked<-mean(masked_df[,'masked_dp'])
+mean_masked
+sd_masked<-sd(masked_df[,'masked_dp'])
+sd_masked
+hist(masked_df[,'masked_dp'], xlim=c(0,1000), breaks=10000)
+```
+
+##After filtering plots
+
+```{r echo=FALSE, fig.cap="Filtered VCF DP vs QD"}
+ggplot(filtered_df, aes(x=filtered_dp, y=filtered_qd) ) +
+  geom_hex() +
+  scale_fill_viridis_c(option = "magma") +
+  theme_bw()
+```
+
+```{r echo=FALSE, fig.cap="Filtered VCF DP vs MQ"}
+ggplot(filtered_df, aes(x=filtered_dp, y=filtered_mq) ) +
+  geom_hex() +
+  scale_fill_viridis_c(option = "magma") +
+  theme_bw()
+```
+
+
+##############################
+## Southern Right Whale Plots
+
+```{r echo=FALSE, fig.cap="Masked VCF DP vs QD"}
+ggplot(smasked_df, aes(x=smasked_dp, y=smasked_qd) ) +
+  geom_hex() +
+  scale_fill_viridis_c(option = "plasma") +
+  theme_bw()
+```
+
+```{r echo=FALSE, fig.cap="Masked VCF DP vs MQ"}
+ggplot(smasked_df, aes(x=smasked_dp, y=smasked_mq) ) +
+  geom_hex() +
+  scale_fill_viridis_c(option = "plasma") +
+  theme_bw()
+```
+
+## Assessing SRW Depth Distribution after Masking
+
+We will want to make an upper DP cut off. Based on the plots below, we will use 2x the median value - Max depth 558.
+
+```{r fig.caption="Histogram of raw depth"}
+mean_smasked<-mean(smasked_df[,'smasked_dp'])
+mean_smasked
+median(smasked_df[,'smasked_dp'])
+sd_smasked<-sd(smasked_df[,'smasked_dp'])
+sd_smasked
+hist(smasked_df[,'smasked_dp'], xlim=c(0,1000), breaks=10000)
+```
+
+
+##After filtering SRW plots
+
+```{r echo=FALSE, fig.cap="Filtered VCF DP vs QD"}
+ggplot(sfiltered_df, aes(x=sfiltered_dp, y=sfiltered_qd) ) +
+  geom_hex() +
+  scale_fill_viridis_c(option = "plasma") +
+  theme_bw()
+```
+
+
+
+```{r echo=FALSE, fig.cap="Filtered VCF DP vs MQ"}
+ggplot(sfiltered_df, aes(x=sfiltered_dp, y=sfiltered_mq) ) +
+  geom_hex() +
+  scale_fill_viridis_c(option = "plasma") +
+  theme_bw()
+```
+### Plots for NARW depicting repetitive sites. 
+
+```{r}
+mean_wau_masked<-mean(wau_masked_df[,'wau_masked_dp'])
+mean_wau_masked
+median(wau_masked_df[,'wau_masked_dp'])
+sd_wau_masked<-sd(wau_masked_df[,'wau_masked_dp'])
+sd_wau_masked
+hist(wau_masked_df[,'wau_masked_dp'], xlim=c(0,1000), breaks=10000)
+```
+
+```{r fig.cap="NARW repetitive sites"}
+ggplot(wau_masked_df, aes(x=wau_masked_dp, y=wau_masked_qd) ) +
+  geom_hex() +
+  scale_fill_viridis_c(option = "viridis") +
+  theme_bw()
+```
+
+
+
+
