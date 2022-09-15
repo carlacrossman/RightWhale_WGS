@@ -7,4 +7,6 @@ vcf_exploration/
 test_recal_filters/
 qualimap/
 wgs_fastqc/
+scripts/more_detailed/
 *.docx
+*.xlsx
