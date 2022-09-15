@@ -7,6 +7,8 @@ vcf_exploration/
 test_recal_filters/
 qualimap/
 wgs_fastqc/
+Various_Metrics/
 scripts/more_detailed/
 *.docx
 *.xlsx
+IBDNe/
