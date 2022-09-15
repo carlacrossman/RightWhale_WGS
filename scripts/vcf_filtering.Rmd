@@ -7,6 +7,14 @@ output: pdf_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
+###--- Set Working Directory---###
+setwd("C:/Users/c_cro/Documents/PhD/RightWhale/WGS/vcf_exploration/")
+
+###---Load Libraries---###
+
+library(vcfR)
+library(ggplot2)
 ```
 
 ## VCF Exploration before and before and after filtering
@@ -19,14 +27,6 @@ I am starting an Rmarkdown workbook to go through my notes and code for assessin
 First I will load libraries and set the working directory. I will also load the vcf files from before any filtering and after repeat masking.
 
 ```{r message=TRUE}
-###---Load Libraries---###
-
-library(vcfR)
-library(ggplot2)
-
-###---Set Working Directory---###
-
-setwd("C:/Users/c_cro/Documents/PhD/RightWhale/WGS/vcf_exploration/")
 
 ###---Load Data Files---###
 
@@ -38,6 +38,8 @@ narw_repeats_df<- read.csv("C:/Users/c_cro/Documents/PhD/RightWhale/WGS/vcf_expl
 
 smasked_df <- read.csv("C:/Users/c_cro/Documents/PhD/RightWhale/WGS/vcf_exploration/masking_srw.csv")
 sfiltered_df <- read.csv("C:/Users/c_cro/Documents/PhD/RightWhale/WGS/vcf_exploration/filtered_srw.csv")
+
+wau_masked_df <- read.csv("C:/Users/c_cro/Documents/PhD/RightWhale/WGS/vcf_exploration/narw_masked_repeats_wau.csv")
 
 ```
 ## Loading Data Files and Extracting relevant data.
@@ -125,6 +127,18 @@ Run this block once only - Not to be run each time!
 #  
 # wau_masked_df <-data.frame(wau_masked_mq, wau_masked_dp, wau_masked_qd)
 # write.csv(wau_masked_df, "C:/Users/c_cro/Documents/PhD/RightWhale/WGS/vcf_exploration/narw_masked_repeats_wau.csv")
+
+##########################################################3
+
+###---SRW w Bowhead sites---###
+srw_w_bowhead_vcf <- read.vcfR("C:/Users/c_cro/Documents/PhD/RightWhale/WGS/VariousMetrics/SRW_w_bowhead_masked_formatfilter.recode.vcf.gz", verbose = TRUE) #vcf after masking
+ 
+srw_w_bowhead_dp <- extract.info(srw_w_bowhead_vcf, element="DP", as.numeric=TRUE)
+
+###---TEST SRW filters---###
+srw_test_vcf <- read.vcfR("C:/Users/c_cro/Documents/PhD/RightWhale/WGS/vcf_exploration/srw_masked_formatfilter_aug5.recode.vcf.gz", verbose = TRUE) #vcf after masking
+ 
+srw_test_dp <- extract.info(srw_test_vcf, element="DP", as.numeric=TRUE)
 ```
 
 ## Plots
@@ -254,6 +268,23 @@ ggplot(wau_masked_df, aes(x=wau_masked_dp, y=wau_masked_qd) ) +
   theme_bw()
 ```
 
+```{r}
+# SRW w bowhead
+mean_srwwbow<-mean(srw_w_bowhead_dp)
+mean_srwwbow
+median(srw_w_bowhead_dp)
+sd_smasked<-sd(srw_w_bowhead_dp)
+sd_smasked
+hist(srw_w_bowhead_dp, xlim=c(0,1000), breaks=10000)
+```
 
 
-
+```{r}
+# SRW test format filtering
+mean_srwtest<-mean(srw_test_dp)
+mean_srwtest
+median(srw_test_dp)
+sd_smasked<-sd(srw_test_dp)
+sd_smasked
+hist(srw_test_dp, xlim=c(0,1000), breaks=10000)
+```
