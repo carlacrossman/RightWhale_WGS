@@ -8,7 +8,7 @@ Within each of the headings below, the scripts were run in the order listed. Som
 
 ## Preprocessing Reads
 
-**01_rw_trim_array.sh** - Trim raw fastq files and run fastqc on trimmed reads
+**01_rw_trim_array.sh** - Trim raw fastq files and run fastqc on trimmed reads  
 **02_rw_align_genome.sh** - Indexes NARW reference genome
 **03_rw_map_min1Mb.sh** - Map trimmed reads to reference genome of scaffold 1Mbp or longer
 **04_rw_sortsam.sh** - Sort the sam file and save as a .bam file
