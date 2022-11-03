@@ -29,9 +29,11 @@ plink --vcf ~/projects/def-frasiert/RW_WGS/vcf/locked/srw_unrelated_filtered_aug
 plink --vcf ~/projects/def-frasiert/RW_WGS/vcf/locked/all_on_narw_unrelated_filtered_aug5.vcf.gz --double-id --allow-extra-chr \
 --set-missing-var-ids @:# \
 --indep-pairwise 50 10 0.2 \
+--remove SRR1685383 \
 --out all_plink_r.2
 
 plink --vcf ~/projects/def-frasiert/RW_WGS/vcf/locked/all_on_narw_unrelated_filtered_aug5.vcf.gz --double-id --allow-extra-chr \
 --set-missing-var-ids @:# \
 --extract all_plink_r.2.prune.in \
+--remove SRR1685383 \
 --make-bed --pca --out all_plink_r.2
