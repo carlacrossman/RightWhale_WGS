@@ -12,3 +12,9 @@ scripts/more_detailed/
 *.docx
 *.xlsx
 IBDNe/
+manuscript/
+SampleSelection/
+reference/
+scripts/*.ipynb
+scripts/vcf_filtering*
+scripts/.ipynb_checkpoints/
