@@ -7,21 +7,21 @@ import matplotlib.pyplot as plt
 import allel; print('scikit-allel', allel.__version__)
 import hmmlearn
 
-narw_vcf = allel.read_vcf('narw_unrelated_filtered_aug5.vcf.gz', fields=['variants/*','calldata/*'])
+srw_vcf = allel.read_vcf('srw_unrelated_filtered_aug5.vcf.gz', fields=['variants/*','calldata/*'])
 
 
-narw_roh = pd.DataFrame()
-for SCAFFOLD in np.unique(narw_vcf['variants/CHROM']):
-    narw_gt = allel.GenotypeArray(narw_vcf['calldata/GT'][narw_vcf['variants/CHROM'] == SCAFFOLD])
+srw_roh = pd.DataFrame()
+for SCAFFOLD in np.unique(srw_vcf['variants/CHROM']):
+    srw_gt = allel.GenotypeArray(srw_vcf['calldata/GT'][srw_vcf['variants/CHROM'] == SCAFFOLD])
     for IND in range(0,9):
-        gv = narw_gt[:,IND]
-        pos = narw_vcf['variants/POS'][narw_vcf['variants/CHROM'] == SCAFFOLD]
+        gv = srw_gt[:,IND]
+        pos = srw_vcf['variants/POS'][srw_vcf['variants/CHROM'] == SCAFFOLD]
         scaffold_size = pos[len(pos)-1]
-        roh = allel.roh_mhmm(gv, pos,min_roh=10000, contig_size=scaffold_size)
+        roh = allel.roh_mhmm(gv, pos,min_roh=10000, contig_size=scaffold_size, phet_roh=0)
         roh[0]['SAMPLE']=IND
         roh[0]['CHROMOSOME']=SCAFFOLD
-        narw_roh=narw_roh.append(roh[0])
+        srw_roh=srw_roh.append(roh[0])
 
 # Save ROH data per sample per scaffold to a .csv file
-narw_roh.to_csv('narw_roh_details.csv')
+srw_roh.to_csv('srw_roh_details_nov28.csv')
 
