@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+# This script was written by Josquin Daron
+# and cannot be used without his permission
+# <josquin.daron@gmail.com>
+
 from __future__ import print_function
 
 import inspect
