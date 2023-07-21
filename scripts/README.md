@@ -26,7 +26,7 @@ Within each of the headings below, the scripts were run in the order listed. Som
 **13_LDdecay.sh** - Calculate the decay in linkage with distance  
 **14_PLINK_popstructure.sh** - Create the eigen vectors for population structure and inputs for ADMIXTURE  
 **15_narw_admixture.sh** - Run ADMIXTURE for population sturcture analyses  
-**16_polarizeVCF.py** - A custom python script by Josquin Daron to assign ancestral alleles (Python 3.8.1) *CANNOT BE USED WITHOUT PERMISSION*  
+**16_polarizeVCF.py** - A custom python script to assign ancestral alleles (Python 3.8.1) *May be available upon request*  
 **16_run_polarize.sh** - Running the polarize python script on the cluster  
 **17_roh_python.py** - Python script to calculate FROH and their abundance (Python 3.8.1)  
 **17_run_roh_python.sh** - Bash script to run python script for FROH calculations  
