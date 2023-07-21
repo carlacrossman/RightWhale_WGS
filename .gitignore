@@ -18,3 +18,4 @@ reference/
 scripts/*.ipynb
 scripts/vcf_filtering*
 scripts/.ipynb_checkpoints/
+scripts/16_polarizeVCF.py
