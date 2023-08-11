@@ -8,6 +8,8 @@
 #SBATCH --time=1:00:00
 
 ################################
+### NOTE: This script was assembled ad hoc from steps taken to create these files. Be sure to check 
+###       each step properly with your files to ensure it is running as expected.
 ### The purpose of this script is to create the bed files required for generate_multihetsep.py for MSMC
 ###
 ### Requirements:
@@ -48,7 +50,7 @@ OUT_DIR=~/scratch/msmc/generate_multisephet_input/MSMC_IM_runs/
 gvcf2bed -I ${GVCF_FILE} -O ${SAMPLE}_${CHR}.bed
 
 #split the phased vcf file into individuals, remove indels and missing data.
-vcftools --gzvcf ${PHASED_VCF} --indv ${SAMPLE} --max-missing 1.0 --remove-indels --recode --out ${SAMPLE}_${CHR}_all.filtered
+vcftools --gzvcf ${PHASED_VCF} --indv ${SAMPLE} --chr HiC_scaffold_${CHR} --max-missing 1.0 --remove-indels --recode --out ${SAMPLE}_${CHR}_all.filtered
 
 #split the raw vcf file by individual and chromosome
 vcftools --gzvcf ${RAW_VCF} --indv ${SAMPLE} --chr HiC_scaffold_${CHR} --recode --out ${SAMPLE}_${CHR}_all.originalmerge
